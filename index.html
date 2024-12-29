@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NXT/WebXR</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon1.svg" type="image/svg+xml">
+    <!-- Include Hammer.js for swipe gesture support -->
+    <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+    <!-- Include UAParser.js for device detection -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/UAParser.js/1.0.2/ua-parser.min.js"></script>
+</head>
+<body>
+    <!-- Introduction Overlay -->
+    <div id="intro-overlay">
+        <!-- Tunnel Effect Wrapper -->
+        <div class="tunnel-wrapper"></div>
+        
+        <!-- Intro Content (Text + Logo) -->
+        <div id="intro-content">
+            <img src="icon2.png" id="overlay-logo" alt="Logo">
+            <h1>Welcome to NXT/WebXR</h1>
+            <p>
+                <strong>No downloads, no payments—just dive right in.</strong>
+                Swipe up or down to browse through a variety of XR games and experiences.  
+                Hit 'Launch' to jump straight in. Or let the loading bar take you there automatically. 
+                Once you've finished exploring, tap back to return to continue your journey. 
+                <em>Discover, experience, repeat—the rabbit hole has no end.</em>
+            </p>
+        </div>
+
+        <!-- Bottom-Centered Buttons -->
+        <div id="intro-bottom-buttons">
+            <!-- Existing "Explore WebXR" Button -->
+            <button id="start-button" class="styled-button">
+                <span class="text">Explore WebXR</span>
+                <div class="shimmer"></div>
+            </button>
+            <!-- New "Open on Quest" Button -->
+            <button id="open-on-quest-button" class="styled-button">
+                <span class="text">Open on Quest</span>
+                <div class="shimmer"></div>
+            </button>
+        </div>
+    </div>
+
+    <div id="video-container">
+        <!-- Main Logo (Top-Left) -->
+        <img src="icon2.png" id="logo" alt="Logo">
+
+        <!-- Video Player -->
+        <video id="video-player" playsinline preload="auto"></video>
+
+        <!-- Navigation Buttons -->
+        <div id="nav-buttons">
+            <button class="nav-button" data-direction="up" aria-label="Next Video">&#9650;</button>
+            <button class="nav-button" data-direction="down" aria-label="Previous Video">&#9660;</button>
+        </div>
+
+        <!-- 'Launch' Button with Trending Label -->
+        <div id="launch-container">
+            <div id="trending-label" class="hidden">Trending</div>
+            <button id="launch-button" class="styled-button">
+                <span class="text">Launch</span>
+                <div class="shimmer"></div>
+            </button>
+        </div>
+
+        <!-- Loading Bar -->
+        <div id="loading-bar-container">
+            <div id="loading-bar"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Icons (Preload) -->
+    <img src="icon1.png" class="hidden" alt="Icon 1">
+    <img src="icon2.png" class="hidden" alt="Icon 2">
+
+    <!-- Main JavaScript File -->
+    <script src="script.js"></script>
+</body>
+</html>
