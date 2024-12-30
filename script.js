@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initializePage();
 
-    // ---- ALL VIDEO DATA ----
+    // ---- ALL VIDEO DATA (normal content) ----
     const videoData = [
         { filename: 'video1.mp4', link: 'https://esc.art/' },
         { filename: 'video2.mp4', link: 'https://brushworkvr.com/paint' },
@@ -122,31 +122,51 @@ document.addEventListener('DOMContentLoaded', () => {
         { filename: 'video50.mp4', link: 'https://signorpipo.itch.io/sir-please' }
     ];
 
-    // Same trending set as previously
+    // ---- TRENDING VIDEOS ----
     const trendingVideos = [
         'video3.mp4',
         'video11.mp4', 'video12.mp4', 'video17.mp4', 'video19.mp4',
         'video20.mp4', 'video28.mp4', 'video29.mp4', 'video49.mp4'
     ];
 
-    let currentPlaylist = createNewPlaylist();
-    let currentVideoIndex = 0;
-    let viewedHistory = []; // Store the history of viewed video indices
-    const loadingTime = 20000;
-    let redirectTimeout;
+    // ---- ADS CATEGORY (single ad item) ----
+    // We'll mark this object with isAd: true so we can distinguish it in the UI.
+    const adVideo = {
+        filename: 'reklame1.mp4',
+        link: 'https://example-ad-redirect.com',  // Replace with a real ad link if needed
+        isAd: true
+    };
 
-    if (returningFromRedirect) {
-        navigateToNext();
-    }
-
+    // ---- CREATE PLAYLIST WITH ADS INSERTED AFTER EVERY 8 NORMAL VIDEOS ----
     function createNewPlaylist() {
         const shuffled = [...videoData];
         shuffleArray(shuffled);
+
+        // Mark each normal video as isAd: false for clarity
         shuffled.forEach(video => {
+            video.isAd = false; 
             video.preloaded = false;
             video.videoElement = null;
         });
-        return shuffled;
+
+        // Build final array with ads after each 8 normal videos
+        let finalPlaylist = [];
+        for (let i = 0; i < shuffled.length; i++) {
+            finalPlaylist.push(shuffled[i]);
+            // Insert the ad after every 8 normal videos, unless we're at the very end
+            if ((i + 1) % 8 === 0 && i !== shuffled.length - 1) {
+                // Push the ad
+                // Make a fresh copy so each ad can also track its own preload
+                finalPlaylist.push({
+                    filename: adVideo.filename,
+                    link: adVideo.link,
+                    isAd: adVideo.isAd,
+                    preloaded: false,
+                    videoElement: null
+                });
+            }
+        }
+        return finalPlaylist;
     }
 
     // Standard Fisher-Yates Shuffle
@@ -155,6 +175,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
+    }
+
+    let currentPlaylist = createNewPlaylist();
+    let currentVideoIndex = 0;
+    let viewedHistory = []; // Store the history of viewed video indices
+    const loadingTime = 20000;
+    let redirectTimeout;
+
+    // If returning from a redirected experience:
+    if (returningFromRedirect) {
+        navigateToNext();
     }
 
     function loadVideo(index) {
@@ -192,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
             videoPlayer.classList.add('video-enter');
 
             resetLoadingBar();
-            checkTrending();
+            updateUIForCurrentVideo();
             preloadAdjacentVideos(2);
 
             setTimeout(() => { navLock = false; }, 600);
@@ -292,14 +323,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function checkTrending() {
-        const currentFilename = currentPlaylist[currentVideoIndex].filename;
-        if (trendingVideos.includes(currentFilename)) {
+    // Decide if the label says "Trending", "Advertising", or is hidden
+    // Also decide if the button says "Launch" or "Learn more"
+    function updateUIForCurrentVideo() {
+        const videoItem = currentPlaylist[currentVideoIndex];
+        trendingLabel.classList.add('hidden');
+        launchButton.classList.remove('trending');
+        launchButton.querySelector('.text').innerText = 'Launch';
+
+        // If it's an ad, show "Advertising" and "Learn more"
+        if (videoItem.isAd) {
+            trendingLabel.innerText = 'Advertising';
             trendingLabel.classList.remove('hidden');
             launchButton.classList.add('trending');
-        } else {
-            trendingLabel.classList.add('hidden');
-            launchButton.classList.remove('trending');
+            launchButton.querySelector('.text').innerText = 'Learn more';
+        }
+        // Else if it's trending, show "Trending"
+        else if (trendingVideos.includes(videoItem.filename)) {
+            trendingLabel.innerText = 'Trending';
+            trendingLabel.classList.remove('hidden');
+            launchButton.classList.add('trending');
         }
     }
 
