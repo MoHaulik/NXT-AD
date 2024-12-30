@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // We'll mark this object with isAd: true so we can distinguish it in the UI.
     const adVideo = {
         filename: 'reklame1.mp4',
-        link: 'https://example-ad-redirect.com',  // Replace with a real ad link if needed
+        link: 'https://www.oculus.com/experiences/app/5302178529865980/',  // Replace with a real ad link if needed
         isAd: true
     };
 
