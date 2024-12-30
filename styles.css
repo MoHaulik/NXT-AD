@@ -185,7 +185,7 @@ body {
     text-align: center;
 }
 
-/* Trending (or "Advertising") Label */
+/* Trending Label */
 #trending-label {
     font-size: 14px;
     color: #ff6a00;
@@ -342,7 +342,7 @@ body {
     color: white;
 }
 
-/* Shimmer effect for trending (or ad) items */
+/* Shimmer effect for trending items */
 .styled-button.trending .text {
     color: transparent;
     background-clip: text;
@@ -475,6 +475,76 @@ body {
     transition-duration: calc(var(--spring-duration) * 0.5);
 }
 
+/* NEW: Favorites Grid Button */
+#favorites-grid-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 15;
+}
+
+/* NEW: Favorites Overlay */
+#favorites-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 25;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* Favorites Overlay Header */
+#favorites-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+#favorites-header h2 {
+    color: white;
+    margin: 0;
+    font-size: 24px;
+}
+
+/* We can style the close button a bit smaller, but let’s keep consistent with the styling. */
+.close-button {
+    padding: 5px 15px;
+    font-size: 16px;
+}
+
+/* Favorites Grid */
+#favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1000px;
+}
+
+/* Each Item in the Grid */
+.favorites-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.favorites-item:hover {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.35);
+}
+
 /* Responsive Styles */
 @media (max-width: 600px) {
     #logo {
@@ -525,5 +595,9 @@ body {
     #intro-bottom-buttons {
         flex-direction: column;
         gap: 20px;
+    }
+
+    #favorites-header h2 {
+        font-size: 20px;
     }
 }
